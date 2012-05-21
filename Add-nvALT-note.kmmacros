@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Activate</key>
+		<string>Normal</string>
+		<key>IsActive</key>
+		<true/>
+		<key>Macros</key>
+		<array>
+			<dict>
+				<key>Actions</key>
+				<array>
+					<dict>
+						<key>Buttons</key>
+						<array>
+							<dict>
+								<key>Button</key>
+								<string>Create</string>
+								<key>Cancel</key>
+								<false/>
+							</dict>
+							<dict>
+								<key>Button</key>
+								<string>Cancel</string>
+								<key>Cancel</key>
+								<true/>
+							</dict>
+							<dict>
+								<key>Button</key>
+								<string>Show</string>
+								<key>Cancel</key>
+								<false/>
+							</dict>
+							<dict>
+								<key>Button</key>
+								<string>Open</string>
+								<key>Cancel</key>
+								<false/>
+							</dict>
+						</array>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<true/>
+						<key>MacroActionType</key>
+						<string>PromptForUserInput</string>
+						<key>Prompt</key>
+						<string></string>
+						<key>ResultButtonVariable</key>
+						<string>Result Button</string>
+						<key>TimeOutAbortsMacro</key>
+						<true/>
+						<key>Title</key>
+						<string>Create nvALT note</string>
+						<key>Variables</key>
+						<array>
+							<dict>
+								<key>Default</key>
+								<string>%ICUDateTime%yyyy-MM-dd_HH.mm.ss%</string>
+								<key>Variable</key>
+								<string>Title</string>
+							</dict>
+							<dict>
+								<key>Default</key>
+								<string>%CurrentClipboard%</string>
+								<key>Variable</key>
+								<string>Body</string>
+							</dict>
+						</array>
+					</dict>
+					<dict>
+						<key>DisplayKind</key>
+						<string>Window</string>
+						<key>File</key>
+						<data>
+						</data>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<true/>
+						<key>MacroActionType</key>
+						<string>ExecuteShellScript</string>
+						<key>NewFile</key>
+						<string></string>
+						<key>Path</key>
+						<string></string>
+						<key>Text</key>
+						<string>#!/bin/zsh
+
+PATH=$HOME/Dropbox/txt:$HOME/Dropbox/bin:$HOME/bin:usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
+
+	# Keyboard Maestro should send us these variables
+FILENAME="${KMVAR_Title}"
+TEXT="${KMVAR_Body}"
+
+	# just to be safe, save the input a text file in $HOME before we do anything else
+zmodload zsh/datetime
+
+TEMPFILE="$HOME/.km-add-to-nvalt.$$.$EPOCHSECONDS.txt"
+
+rm -f "$TEMPFILE"
+
+echo "
+FILENAME=$FILENAME
+
+TEXT = $TEXT " &gt;&gt;| "$TEMPFILE"
+
+	# now call the real script
+	# and if it fails, open the tempfile with the default text editor
+
+km-add-to-nvalt.sh
+
+EXIT="$?"
+
+if [ "$EXIT" = "0" ]
+then
+	# if the script exited cleanly, delete the tempfile
+	rm -f "$TEMPFILE"
+
+else
+
+	/usr/bin/open -t "$TEMPFILE"
+
+	exit 1
+fi
+</string>
+						<key>TimeOutAbortsMacro</key>
+						<true/>
+						<key>TrimResults</key>
+						<true/>
+						<key>UseText</key>
+						<true/>
+						<key>Variable</key>
+						<string>Variable</string>
+					</dict>
+				</array>
+				<key>IsActive</key>
+				<true/>
+				<key>Name</key>
+				<string>Add nvALT note</string>
+				<key>Triggers</key>
+				<array>
+					<dict>
+						<key>FireType</key>
+						<string>Pressed</string>
+						<key>KeyCode</key>
+						<integer>110</integer>
+						<key>MacroTriggerType</key>
+						<string>HotKey</string>
+						<key>Modifiers</key>
+						<integer>0</integer>
+						<key>TriggerRepeat</key>
+						<false/>
+					</dict>
+					<dict>
+						<key>FireType</key>
+						<string>Pressed</string>
+						<key>KeyCode</key>
+						<integer>45</integer>
+						<key>MacroTriggerType</key>
+						<string>HotKey</string>
+						<key>Modifiers</key>
+						<integer>6400</integer>
+						<key>TriggerRepeat</key>
+						<false/>
+					</dict>
+				</array>
+				<key>UID</key>
+				<string>7851F80C-772C-4AF6-AE40-68F6B4157E0B</string>
+			</dict>
+		</array>
+		<key>Name</key>
+		<string>Global Macro Group</string>
+		<key>UID</key>
+		<string>DA8512F7-F323-46B1-8319-752E0495CFD0</string>
+	</dict>
+</array>
+</plist>
